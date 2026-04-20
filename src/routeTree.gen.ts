@@ -11,9 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PropertiesRouteImport } from './routes/properties'
 import { Route as MyRequestsRouteImport } from './routes/my-requests'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
+import { Route as DashboardPropertiesNewRouteImport } from './routes/dashboard.properties.new'
 
 const PropertiesRoute = PropertiesRouteImport.update({
   id: '/properties',
@@ -23,6 +25,11 @@ const PropertiesRoute = PropertiesRouteImport.update({
 const MyRequestsRoute = MyRequestsRouteImport.update({
   id: '/my-requests',
   path: '/my-requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -40,46 +47,74 @@ const PropertiesIdRoute = PropertiesIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => PropertiesRoute,
 } as any)
+const DashboardPropertiesNewRoute = DashboardPropertiesNewRouteImport.update({
+  id: '/properties/new',
+  path: '/properties/new',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/my-requests': typeof MyRequestsRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
+  '/dashboard/properties/new': typeof DashboardPropertiesNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/my-requests': typeof MyRequestsRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
+  '/dashboard/properties/new': typeof DashboardPropertiesNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/my-requests': typeof MyRequestsRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
+  '/dashboard/properties/new': typeof DashboardPropertiesNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/my-requests' | '/properties' | '/properties/$id'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/my-requests'
+    | '/properties'
+    | '/properties/$id'
+    | '/dashboard/properties/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/my-requests' | '/properties' | '/properties/$id'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/my-requests'
+    | '/properties'
+    | '/properties/$id'
+    | '/dashboard/properties/new'
   id:
     | '__root__'
     | '/'
     | '/auth'
+    | '/dashboard'
     | '/my-requests'
     | '/properties'
     | '/properties/$id'
+    | '/dashboard/properties/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   MyRequestsRoute: typeof MyRequestsRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
 }
@@ -98,6 +133,13 @@ declare module '@tanstack/react-router' {
       path: '/my-requests'
       fullPath: '/my-requests'
       preLoaderRoute: typeof MyRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -121,8 +163,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesIdRouteImport
       parentRoute: typeof PropertiesRoute
     }
+    '/dashboard/properties/new': {
+      id: '/dashboard/properties/new'
+      path: '/properties/new'
+      fullPath: '/dashboard/properties/new'
+      preLoaderRoute: typeof DashboardPropertiesNewRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
+
+interface DashboardRouteChildren {
+  DashboardPropertiesNewRoute: typeof DashboardPropertiesNewRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardPropertiesNewRoute: DashboardPropertiesNewRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
 
 interface PropertiesRouteChildren {
   PropertiesIdRoute: typeof PropertiesIdRoute
@@ -139,6 +200,7 @@ const PropertiesRouteWithChildren = PropertiesRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   MyRequestsRoute: MyRequestsRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
 }
