@@ -14,16 +14,312 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      access_requests: {
+        Row: {
+          conditions_acknowledged: boolean
+          created_at: string
+          group_size: number
+          id: string
+          price_paid: number | null
+          property_id: string
+          requested_datetime: string
+          status: Database["public"]["Enums"]["request_status"]
+          updated_at: string
+          user_id: string
+          visitor_message: string | null
+        }
+        Insert: {
+          conditions_acknowledged?: boolean
+          created_at?: string
+          group_size?: number
+          id?: string
+          price_paid?: number | null
+          property_id: string
+          requested_datetime: string
+          status?: Database["public"]["Enums"]["request_status"]
+          updated_at?: string
+          user_id: string
+          visitor_message?: string | null
+        }
+        Update: {
+          conditions_acknowledged?: boolean
+          created_at?: string
+          group_size?: number
+          id?: string
+          price_paid?: number | null
+          property_id?: string
+          requested_datetime?: string
+          status?: Database["public"]["Enums"]["request_status"]
+          updated_at?: string
+          user_id?: string
+          visitor_message?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "access_requests_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      access_rules: {
+        Row: {
+          created_at: string
+          group_size_limit: number | null
+          id: string
+          property_id: string
+          time_restrictions: string | null
+          warnings: string | null
+        }
+        Insert: {
+          created_at?: string
+          group_size_limit?: number | null
+          id?: string
+          property_id: string
+          time_restrictions?: string | null
+          warnings?: string | null
+        }
+        Update: {
+          created_at?: string
+          group_size_limit?: number | null
+          id?: string
+          property_id?: string
+          time_restrictions?: string | null
+          warnings?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "access_rules_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: true
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_logs: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          metadata: Json | null
+          property_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          property_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          property_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_logs_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pricing: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          pricing_type: Database["public"]["Enums"]["pricing_type"]
+          property_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          pricing_type?: Database["public"]["Enums"]["pricing_type"]
+          property_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          pricing_type?: Database["public"]["Enums"]["pricing_type"]
+          property_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pricing_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: true
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      properties: {
+        Row: {
+          acreage: number | null
+          allowed_activities: string[]
+          conditions: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_available: boolean
+          landowner_id: string
+          latitude: number
+          longitude: number
+          name: string
+          region: string | null
+          steward_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          acreage?: number | null
+          allowed_activities?: string[]
+          conditions?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_available?: boolean
+          landowner_id: string
+          latitude: number
+          longitude: number
+          name: string
+          region?: string | null
+          steward_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          acreage?: number | null
+          allowed_activities?: string[]
+          conditions?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_available?: boolean
+          landowner_id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          region?: string | null
+          steward_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      visits: {
+        Row: {
+          access_request_id: string
+          check_in_time: string | null
+          check_out_time: string | null
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          access_request_id: string
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          access_request_id?: string
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visits_access_request_id_fkey"
+            columns: ["access_request_id"]
+            isOneToOne: true
+            referencedRelation: "access_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "visitor" | "landowner" | "admin"
+      pricing_type: "per_visit" | "day_pass" | "subscription"
+      request_status: "pending" | "approved" | "declined" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +446,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["visitor", "landowner", "admin"],
+      pricing_type: ["per_visit", "day_pass", "subscription"],
+      request_status: ["pending", "approved", "declined", "cancelled"],
+    },
   },
 } as const
