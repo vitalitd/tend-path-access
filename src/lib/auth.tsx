@@ -36,17 +36,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(newSession);
       setUser(newSession?.user ?? null);
       if (newSession?.user) {
-        setTimeout(() => void loadRole(newSession.user.id), 0);
+        setLoading(true);
+        setTimeout(() => {
+          void loadRole(newSession.user.id).finally(() => setLoading(false));
+        }, 0);
       } else {
         setRole(null);
+        setLoading(false);
       }
     });
 
     supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
       setUser(s?.user ?? null);
-      if (s?.user) void loadRole(s.user.id);
-      setLoading(false);
+      if (s?.user) {
+        void loadRole(s.user.id).finally(() => setLoading(false));
+      } else {
+        setLoading(false);
+      }
     });
 
     return () => sub.subscription.unsubscribe();
