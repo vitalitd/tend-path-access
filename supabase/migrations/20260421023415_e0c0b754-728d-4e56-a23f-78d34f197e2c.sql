@@ -1,0 +1,1 @@
+DELETE FROM auth.users WHERE email IN ('steward-test@tend.local', 'visitor-test@tend.local');
