@@ -155,6 +155,28 @@ function Dashboard() {
           </section>
         )}
 
+        {/* Approved requests with payment status */}
+        {requests.filter((r) => r.status === "approved").length > 0 && (
+          <section className="mb-16">
+            <p className="label-meta mb-4">§ Approved passages · payment status</p>
+            <div className="space-y-3">
+              {requests
+                .filter((r) => r.status === "approved")
+                .map((r) => (
+                  <article key={r.id} className="pinned-card p-5 flex flex-wrap justify-between items-center gap-4">
+                    <div>
+                      <h3 className="font-display text-lg tracking-tight">{r.properties?.name}</h3>
+                      <p className="label-meta mt-1">
+                        {new Date(r.requested_datetime).toLocaleString()} · group of {r.group_size}
+                      </p>
+                    </div>
+                    <PaymentBadge status={r.payment_status} amount={r.price_paid} />
+                  </article>
+                ))}
+            </div>
+          </section>
+        )}
+
         {/* Properties */}
         <section>
           <p className="label-meta mb-4">§ Your registry</p>
