@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { createCheckoutSession } from "@/lib/payments.functions";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/my-requests")({
@@ -18,6 +20,8 @@ interface RequestRow {
   requested_datetime: string;
   group_size: number;
   visitor_message: string | null;
+  payment_status: string;
+  price_paid: number | null;
   properties: { id: string; name: string; region: string | null; landowner_id: string } | null;
   visits: { id: string; check_in_time: string | null; check_out_time: string | null }[] | null;
 }
@@ -27,18 +31,36 @@ function MyRequestsPage() {
   const navigate = useNavigate();
   const [requests, setRequests] = useState<RequestRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [payingId, setPayingId] = useState<string | null>(null);
+  const checkout = useServerFn(createCheckoutSession);
 
   const load = async () => {
     if (!user) return;
     const { data, error } = await supabase
       .from("access_requests")
       .select(
-        "id, status, requested_datetime, group_size, visitor_message, properties(id, name, region, landowner_id), visits(id, check_in_time, check_out_time)"
+        "id, status, requested_datetime, group_size, visitor_message, payment_status, price_paid, properties(id, name, region, landowner_id), visits(id, check_in_time, check_out_time)"
       )
       .eq("user_id", user.id)
       .order("requested_datetime", { ascending: false });
     if (!error && data) setRequests(data as RequestRow[]);
     setLoading(false);
+  };
+
+  const handlePay = async (requestId: string) => {
+    setPayingId(requestId);
+    try {
+      const res = await checkout({ data: { request_id: requestId } });
+      if (res.error || !res.url) {
+        toast.error(res.error ?? "Could not start checkout.");
+        setPayingId(null);
+        return;
+      }
+      window.location.href = res.url;
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Checkout failed.");
+      setPayingId(null);
+    }
   };
 
   useEffect(() => {
@@ -48,6 +70,18 @@ function MyRequestsPage() {
     }
     if (user) void load();
   }, [user, authLoading]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get("payment");
+    if (payment === "success") {
+      toast.success("Payment received. Your passage is confirmed.");
+      window.history.replaceState({}, "", window.location.pathname);
+    } else if (payment === "cancelled") {
+      toast.message("Payment cancelled. You can try again any time.");
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
 
   const handleCheckIn = async (requestId: string) => {
     const { error } = await supabase
@@ -145,8 +179,32 @@ function MyRequestsPage() {
                     )}
                   </div>
 
-                  {isApproved && (
-                    <div className="mt-5 pt-4 border-t border-ink/15 flex flex-wrap gap-3">
+                  {isApproved && r.payment_status !== "paid" && (
+                    <div className="mt-5 pt-4 border-t border-ink/15 bg-twine/5 -mx-6 -mb-6 px-6 py-5">
+                      <p className="label-meta mb-2">§ Pay to confirm your passage</p>
+                      <p className="text-sm text-ink-muted mb-4 leading-relaxed">
+                        The steward has approved your request. Complete payment to unlock check-in.
+                      </p>
+                      <button
+                        onClick={() => handlePay(r.id)}
+                        disabled={payingId === r.id}
+                        className="font-mono text-xs uppercase tracking-widest bg-ink text-paper px-5 py-2.5 hover:bg-rust transition-colors disabled:opacity-50"
+                      >
+                        {payingId === r.id
+                          ? "Opening checkout…"
+                          : r.payment_status === "failed"
+                          ? "Retry payment"
+                          : "Pay now"}
+                      </button>
+                      {r.payment_status === "failed" && (
+                        <p className="label-meta text-rust mt-3">Last payment attempt failed.</p>
+                      )}
+                    </div>
+                  )}
+
+                  {isApproved && r.payment_status === "paid" && (
+                    <div className="mt-5 pt-4 border-t border-ink/15 flex flex-wrap gap-3 items-center">
+                      <span className="label-meta text-moss">● Paid</span>
                       {!visit && (
                         <button
                           onClick={() => handleCheckIn(r.id)}

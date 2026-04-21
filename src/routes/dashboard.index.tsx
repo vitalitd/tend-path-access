@@ -28,6 +28,8 @@ interface RequestRow {
   visitor_message: string | null;
   property_id: string;
   user_id: string;
+  payment_status: string;
+  price_paid: number | null;
   properties: { name: string } | null;
 }
 
@@ -48,7 +50,7 @@ function Dashboard() {
         .order("created_at", { ascending: false }),
       supabase
         .from("access_requests")
-        .select("id, status, requested_datetime, group_size, visitor_message, property_id, user_id, properties!inner(name, landowner_id)")
+        .select("id, status, requested_datetime, group_size, visitor_message, property_id, user_id, payment_status, price_paid, properties!inner(name, landowner_id)")
         .eq("properties.landowner_id", user.id)
         .order("created_at", { ascending: false }),
     ]);
@@ -153,6 +155,28 @@ function Dashboard() {
           </section>
         )}
 
+        {/* Approved requests with payment status */}
+        {requests.filter((r) => r.status === "approved").length > 0 && (
+          <section className="mb-16">
+            <p className="label-meta mb-4">§ Approved passages · payment status</p>
+            <div className="space-y-3">
+              {requests
+                .filter((r) => r.status === "approved")
+                .map((r) => (
+                  <article key={r.id} className="pinned-card p-5 flex flex-wrap justify-between items-center gap-4">
+                    <div>
+                      <h3 className="font-display text-lg tracking-tight">{r.properties?.name}</h3>
+                      <p className="label-meta mt-1">
+                        {new Date(r.requested_datetime).toLocaleString()} · group of {r.group_size}
+                      </p>
+                    </div>
+                    <PaymentBadge status={r.payment_status} amount={r.price_paid} />
+                  </article>
+                ))}
+            </div>
+          </section>
+        )}
+
         {/* Properties */}
         <section>
           <p className="label-meta mb-4">§ Your registry</p>
@@ -210,5 +234,24 @@ function Dashboard() {
         </section>
       </main>
     </div>
+  );
+}
+
+function PaymentBadge({ status, amount }: { status: string; amount: number | null }) {
+  const styles: Record<string, string> = {
+    paid: "bg-moss/15 text-moss border-moss/40",
+    pending: "bg-twine/20 text-ink border-twine/40",
+    failed: "bg-rust/15 text-rust border-rust/40",
+  };
+  const label =
+    status === "paid"
+      ? `● Paid${amount != null ? ` · £${Number(amount).toFixed(0)}` : ""}`
+      : status === "failed"
+      ? "○ Payment failed"
+      : "○ Awaiting payment";
+  return (
+    <span className={`label-meta px-3 py-1.5 border ${styles[status] ?? styles.pending}`}>
+      {label}
+    </span>
   );
 }
