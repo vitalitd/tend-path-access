@@ -22,8 +22,8 @@ interface Detail {
   steward_name: string | null;
   acreage: number | null;
   is_available: boolean;
-  access_rules: { group_size_limit: number | null; time_restrictions: string | null; warnings: string | null }[] | null;
-  pricing: { amount: number; currency: string; pricing_type: string }[] | null;
+  access_rules: { group_size_limit: number | null; time_restrictions: string | null; warnings: string | null } | null;
+  pricing: { amount: number; currency: string; pricing_type: string } | null;
 }
 
 function PropertyDetail() {
