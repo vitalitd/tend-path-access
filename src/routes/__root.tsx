@@ -45,6 +45,12 @@ export const Route = createRootRoute({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Tend — Quiet passage on kept ground" },
+      { name: "description", content: "A digital platform connecting landowners and visitors for managed access to private land." },
+      { property: "og:description", content: "A digital platform connecting landowners and visitors for managed access to private land." },
+      { name: "twitter:description", content: "A digital platform connecting landowners and visitors for managed access to private land." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/07b7ae38-5cab-4da9-86f0-96ae201221e3/id-preview-ff4f375d--4eaa22cf-6955-4e44-bd88-4f8dc2450869.lovable.app-1776770314356.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/07b7ae38-5cab-4da9-86f0-96ae201221e3/id-preview-ff4f375d--4eaa22cf-6955-4e44-bd88-4f8dc2450869.lovable.app-1776770314356.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
