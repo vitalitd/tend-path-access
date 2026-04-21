@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { createCheckoutSession } from "@/lib/payments.functions";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/my-requests")({
@@ -18,6 +20,8 @@ interface RequestRow {
   requested_datetime: string;
   group_size: number;
   visitor_message: string | null;
+  payment_status: string;
+  price_paid: number | null;
   properties: { id: string; name: string; region: string | null; landowner_id: string } | null;
   visits: { id: string; check_in_time: string | null; check_out_time: string | null }[] | null;
 }
@@ -27,18 +31,36 @@ function MyRequestsPage() {
   const navigate = useNavigate();
   const [requests, setRequests] = useState<RequestRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [payingId, setPayingId] = useState<string | null>(null);
+  const checkout = useServerFn(createCheckoutSession);
 
   const load = async () => {
     if (!user) return;
     const { data, error } = await supabase
       .from("access_requests")
       .select(
-        "id, status, requested_datetime, group_size, visitor_message, properties(id, name, region, landowner_id), visits(id, check_in_time, check_out_time)"
+        "id, status, requested_datetime, group_size, visitor_message, payment_status, price_paid, properties(id, name, region, landowner_id), visits(id, check_in_time, check_out_time)"
       )
       .eq("user_id", user.id)
       .order("requested_datetime", { ascending: false });
     if (!error && data) setRequests(data as RequestRow[]);
     setLoading(false);
+  };
+
+  const handlePay = async (requestId: string) => {
+    setPayingId(requestId);
+    try {
+      const res = await checkout({ data: { request_id: requestId } });
+      if (res.error || !res.url) {
+        toast.error(res.error ?? "Could not start checkout.");
+        setPayingId(null);
+        return;
+      }
+      window.location.href = res.url;
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Checkout failed.");
+      setPayingId(null);
+    }
   };
 
   useEffect(() => {
