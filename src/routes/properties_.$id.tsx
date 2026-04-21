@@ -22,8 +22,8 @@ interface Detail {
   steward_name: string | null;
   acreage: number | null;
   is_available: boolean;
-  access_rules: { group_size_limit: number | null; time_restrictions: string | null; warnings: string | null }[] | null;
-  pricing: { amount: number; currency: string; pricing_type: string }[] | null;
+  access_rules: { group_size_limit: number | null; time_restrictions: string | null; warnings: string | null } | null;
+  pricing: { amount: number; currency: string; pricing_type: string } | null;
 }
 
 function PropertyDetail() {
@@ -66,7 +66,7 @@ function PropertyDetail() {
       return;
     }
     setSubmitting(true);
-    const price = property?.pricing?.[0];
+    const price = property?.pricing;
     const { error } = await supabase.from("access_requests").insert({
       user_id: user.id,
       property_id: id,
@@ -88,8 +88,8 @@ function PropertyDetail() {
   if (loading) return <div className="min-h-screen bg-paper"><SiteHeader /><p className="p-12 label-meta">Loading…</p></div>;
   if (!property) return <div className="min-h-screen bg-paper"><SiteHeader /><p className="p-12 label-meta">Not found.</p></div>;
 
-  const rules = property.access_rules?.[0];
-  const price = property.pricing?.[0];
+  const rules = property.access_rules;
+  const price = property.pricing;
 
   return (
     <div className="min-h-screen bg-paper">
