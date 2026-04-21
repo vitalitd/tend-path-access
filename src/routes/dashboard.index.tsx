@@ -236,3 +236,22 @@ function Dashboard() {
     </div>
   );
 }
+
+function PaymentBadge({ status, amount }: { status: string; amount: number | null }) {
+  const styles: Record<string, string> = {
+    paid: "bg-moss/15 text-moss border-moss/40",
+    pending: "bg-twine/20 text-ink border-twine/40",
+    failed: "bg-rust/15 text-rust border-rust/40",
+  };
+  const label =
+    status === "paid"
+      ? `● Paid${amount != null ? ` · £${Number(amount).toFixed(0)}` : ""}`
+      : status === "failed"
+      ? "○ Payment failed"
+      : "○ Awaiting payment";
+  return (
+    <span className={`label-meta px-3 py-1.5 border ${styles[status] ?? styles.pending}`}>
+      {label}
+    </span>
+  );
+}
