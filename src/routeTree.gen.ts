@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as PropertiesIdRouteImport } from './routes/properties_.$id'
 import { Route as DashboardPropertiesNewRouteImport } from './routes/dashboard.properties.new'
+import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
 
 const PropertiesRoute = PropertiesRouteImport.update({
   id: '/properties',
@@ -58,6 +59,11 @@ const DashboardPropertiesNewRoute = DashboardPropertiesNewRouteImport.update({
   path: '/properties/new',
   getParentRoute: () => DashboardRoute,
 } as any)
+const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
+  id: '/api/stripe/webhook',
+  path: '/api/stripe/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/properties': typeof PropertiesRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/dashboard/properties/new': typeof DashboardPropertiesNewRoute
 }
 export interface FileRoutesByTo {
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/properties': typeof PropertiesRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/dashboard/properties/new': typeof DashboardPropertiesNewRoute
 }
 export interface FileRoutesById {
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/properties': typeof PropertiesRoute
   '/properties_/$id': typeof PropertiesIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/dashboard/properties/new': typeof DashboardPropertiesNewRoute
 }
 export interface FileRouteTypes {
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/properties'
     | '/properties/$id'
     | '/dashboard/'
+    | '/api/stripe/webhook'
     | '/dashboard/properties/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/properties'
     | '/properties/$id'
     | '/dashboard'
+    | '/api/stripe/webhook'
     | '/dashboard/properties/new'
   id:
     | '__root__'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/properties'
     | '/properties_/$id'
     | '/dashboard/'
+    | '/api/stripe/webhook'
     | '/dashboard/properties/new'
   fileRoutesById: FileRoutesById
 }
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   MyRequestsRoute: typeof MyRequestsRoute
   PropertiesRoute: typeof PropertiesRoute
   PropertiesIdRoute: typeof PropertiesIdRoute
+  ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -188,6 +201,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardPropertiesNewRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/api/stripe/webhook': {
+      id: '/api/stripe/webhook'
+      path: '/api/stripe/webhook'
+      fullPath: '/api/stripe/webhook'
+      preLoaderRoute: typeof ApiStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -212,7 +232,17 @@ const rootRouteChildren: RootRouteChildren = {
   MyRequestsRoute: MyRequestsRoute,
   PropertiesRoute: PropertiesRoute,
   PropertiesIdRoute: PropertiesIdRoute,
+  ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
