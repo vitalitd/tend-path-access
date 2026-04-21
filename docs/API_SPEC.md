@@ -244,16 +244,30 @@ Response:
 ---
 
 ## 6. Payments (Future)
-Not included in MVP.  
-Endpoints defined for future Stripe integration.
 
 ### POST /payments/intent
-Create payment intent.
+Create a Stripe Checkout Session.
 
-### POST /payments/confirm
-Confirm payment.
+Request:
+{
+  "access_request_id": "uuid"
+}
+
+Response:
+{
+  "checkout_url": "string"
+}
 
 ---
+
+### POST /payments/webhook
+Stripe webhook receiver.
+
+Notes:
+- Validates Stripe signature  
+- Updates payment status  
+- Marks access request as “paid”  
+- Logs event in audit trail  
 
 ## 7. Admin
 
