@@ -101,6 +101,8 @@ Fields:
 - **price_paid**  
 - **conditions_acknowledged** (boolean)  
 - **created_at**
+- **price_paid**  
+- payment_status (pending | paid | failed)
 
 Notes:
 - Approval triggers instructions and safety reminders.  
