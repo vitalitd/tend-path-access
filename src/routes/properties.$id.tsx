@@ -29,10 +29,9 @@ interface Detail {
 function PropertyDetail() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-  const { user, role } = useAuth();
+  const { user, role, loading: authLoading } = useAuth();
   const [property, setProperty] = useState<Detail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
 
   // form
   const [date, setDate] = useState("");
@@ -196,14 +195,20 @@ function PropertyDetail() {
                 <span className="label-meta">{property.is_available ? "● Open" : "Closed"}</span>
               </div>
 
-              {!open ? (
+              {authLoading ? (
+                <p className="label-meta py-4 text-center">Loading…</p>
+              ) : !user ? (
                 <button
-                  onClick={() => (user ? setOpen(true) : navigate({ to: "/auth" }))}
+                  onClick={() => navigate({ to: "/auth" })}
                   disabled={!property.is_available}
                   className="w-full font-mono text-xs uppercase tracking-widest border border-ink py-4 hover:bg-ink hover:text-paper transition-colors disabled:opacity-40"
                 >
-                  {user ? "Request Passage" : "Sign in to request"}
+                  Sign in to request
                 </button>
+              ) : role === "landowner" ? (
+                <p className="label-meta py-4 text-center text-ink-muted">
+                  Stewards cannot request passage.
+                </p>
               ) : (
                 <form onSubmit={handleRequest} className="space-y-4">
                   <div>
@@ -213,7 +218,8 @@ function PropertyDetail() {
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
                       required
-                      className="w-full bg-paper border border-ink/30 px-3 py-2 font-mono text-sm"
+                      disabled={!property.is_available}
+                      className="w-full bg-paper border border-ink/30 px-3 py-2 font-mono text-sm disabled:opacity-50"
                     />
                   </div>
                   <div>
@@ -225,7 +231,8 @@ function PropertyDetail() {
                       value={groupSize}
                       onChange={(e) => setGroupSize(Number(e.target.value))}
                       required
-                      className="w-full bg-paper border border-ink/30 px-3 py-2 font-mono text-sm"
+                      disabled={!property.is_available}
+                      className="w-full bg-paper border border-ink/30 px-3 py-2 font-mono text-sm disabled:opacity-50"
                     />
                   </div>
                   <div>
@@ -234,7 +241,8 @@ function PropertyDetail() {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       rows={3}
-                      className="w-full bg-paper border border-ink/30 px-3 py-2 text-sm"
+                      disabled={!property.is_available}
+                      className="w-full bg-paper border border-ink/30 px-3 py-2 text-sm disabled:opacity-50"
                     />
                   </div>
                   <label className="flex gap-3 items-start cursor-pointer">
@@ -242,6 +250,7 @@ function PropertyDetail() {
                       type="checkbox"
                       checked={acknowledged}
                       onChange={(e) => setAcknowledged(e.target.checked)}
+                      disabled={!property.is_available}
                       className="mt-1"
                     />
                     <span className="text-sm text-ink-muted leading-relaxed">
@@ -250,10 +259,10 @@ function PropertyDetail() {
                   </label>
                   <button
                     type="submit"
-                    disabled={submitting || role === "landowner"}
+                    disabled={submitting || !property.is_available}
                     className="w-full font-mono text-xs uppercase tracking-widest bg-ink text-paper py-4 hover:bg-rust transition-colors disabled:opacity-50"
                   >
-                    {submitting ? "Sending…" : role === "landowner" ? "Stewards cannot request" : "Submit request"}
+                    {submitting ? "Sending…" : !property.is_available ? "Closed to requests" : "Submit request"}
                   </button>
                 </form>
               )}
