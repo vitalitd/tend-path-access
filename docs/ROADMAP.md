@@ -1,206 +1,133 @@
-# ARCHITECTURE.md  
-Tend — System Architecture  
+# ROADMAP.md  
+Tend — Product Roadmap  
 Quiet, careful, safety‑aware design language
 
 ---
 
-## 1. Overview
-Tend is a digital access platform that connects landholders and visitors through a trusted, care‑led system.  
-The architecture is modular, steady, and easy to evolve from prototype to production.  
-It supports:
-
-- rapid iteration (Lovable)  
-- structured engineering (VS Code + Copilot)  
-- long‑term deployment (Azure)  
-
-The system is intentionally simple and explicit.
+## 1. Purpose
+This roadmap outlines the staged development of Tend from prototype to production.  
+It provides clarity for design, engineering, and future collaborators, ensuring steady, predictable progress.
 
 ---
 
-## 2. System Architecture
+## 2. Phase 1 — Prototype (0–2 months)
 
-Tend consists of three major layers:
+### Goals
+- Validate the core concept  
+- Build a functional UI  
+- Demonstrate visitor and landholder flows  
 
----
-
-## 2.1 Frontend (Client Layer)
-
-**Framework:** React or Next.js  
-**Purpose:** User‑facing interface for landholders and visitors
-
-Key Responsibilities:
-- Authentication  
-- Property discovery  
+### Deliverables
+- Property discovery page  
 - Access request flow  
-- Check‑in / check‑out  
-- Map‑based navigation  
-- Landholder dashboard  
+- Landholder property setup  
+- Basic check‑in / check‑out  
+- Simple map integration  
+- No payments  
+- No insurance  
 
-Notes:
-- Tone is quiet and factual.  
-- Safety notes are always visible.  
+### Tools
+- Lovable for UI and scaffolding  
+- GitHub for repository  
+- VS Code for refinement  
+
+Notes:  
+Prototype is calm, minimal, and focused on flow clarity.
 
 ---
 
-## 2.2 Backend (Application Layer)
+## 3. Phase 2 — MVP (2–4 months)
 
-**Framework:** Node.js (Express) or Python (FastAPI)  
-**Purpose:** Business logic, API endpoints, validation, and integrations
+### Goals
+- Launch a working version for early testers  
+- Implement core backend logic  
+- Add authentication and database  
 
-Key Responsibilities:
-- User management  
+### Deliverables
+- Auth (visitor + landholder roles)  
+- PostgreSQL schema  
 - Access request lifecycle  
-- Visit tracking  
-- Rule enforcement  
-- Notifications (future)  
-- Payment integration (future)  
-- Insurance integration (future)  
-
-Notes:
-- API is REST‑based and returns JSON.  
-- Validation is strict and predictable.  
-
----
-
-## 2.3 Database (Persistence Layer)
-
-**Database:** PostgreSQL (Supabase or Azure Postgres)  
-**Purpose:** Store structured, relational data
-
-Core Tables:
-- users  
-- properties  
-- access_rules  
-- access_requests  
-- visits  
-- pricing  
-- audit_logs  
-
-Notes:
-- Geospatial fields use PostGIS where needed.  
-- Audit logs support operational oversight.  
-
----
-
-## 3. Data Flow
-
----
-
-### 3.1 Visitor Flow
-1. Visitor browses available properties  
-2. Submits an access request  
-3. Backend validates request  
-4. Landholder approves or declines  
-5. Visitor receives confirmation  
-6. Visitor checks in and checks out  
-7. Visit is logged in the audit trail  
-
----
-
-### 3.2 Landholder Flow
-1. Landholder creates a property  
-2. Sets rules, availability, and pricing  
-3. Receives access requests  
-4. Approves or declines  
-5. Views visit history  
-
----
-
-## 4. Authentication & Security
-
-**Auth Provider:** Auth0, Supabase Auth, or Azure AD B2C
-
-Security Measures:
-- JWT‑based authentication  
-- Role‑based access control (visitor, landholder, admin)  
-- Audit logging  
-- Input validation  
-- Rate limiting  
-
-Notes:
-- Safety and privacy are prioritised.  
-- Admin role is reserved for operational oversight.  
-
----
-
-## 5. Maps & Geospatial Logic
-
-**Map Provider:** Mapbox or Leaflet
-
-Features:
-- Property boundaries  
-- Allowed zones  
-- Restricted zones  
-- Check‑in radius validation  
-- GPS‑based visit tracking  
-
-Notes:
-- GPS is optional and privacy‑aware.  
-- No‑go zones are displayed clearly and calmly.  
-
----
-
-## 6. Integrations (Future)
-
-### Payments
-- Stripe for bookings and payouts
-
-### Insurance
-- API integration for coverage verification
-
-### Notifications
-- Email (SendGrid)  
-- SMS (Twilio)
-
-Notes:
-- Not included in MVP.  
-- Designed for clean future expansion.  
-
----
-
-## 7. Deployment Architecture
-
-### MVP
-- **Frontend:** Vercel or Lovable hosting  
-- **Backend:** Lovable backend or simple Node server  
-- **Database:** Supabase  
-
-### Production
-- **Frontend:** Azure Static Web Apps  
-- **Backend:** Azure App Service  
-- **Database:** Azure Postgres  
-- **Storage:** Azure Blob Storage  
-- **Monitoring:** Azure Application Insights  
-
-Notes:
-- Deployment is steady and predictable.  
-- Infrastructure is minimal but scalable.  
-
----
-
-## 8. Development Workflow
-
-### Prototype
-- Lovable generates UI and initial code  
-- GitHub stores the repo  
-- VS Code used for refinement  
-
-### Engineering
-- Copilot assists with backend logic  
-- GitHub PRs for structured changes  
-- Automated tests added  
+- Visit logging  
+- Basic notifications  
+- Simple admin dashboard  
 
 ### Deployment
-- CI/CD via GitHub Actions  
-- Azure hosting  
+- **Frontend:** Vercel  
+- **Backend:** Node.js or FastAPI  
+- **Database:** Supabase  
+
+Notes:  
+MVP prioritises safety, reliability, and clear flows.
 
 ---
 
-## 9. Guiding Principles
-- Care‑led  
-- Secure by design  
-- Modular  
-- Scalable  
-- Transparent  
-- Easy to maintain  
+## 4. Phase 3 — Beta (4–8 months)
+
+### Goals
+- Add commercial features  
+- Improve safety and accountability  
+- Prepare for real‑world use  
+
+### Deliverables
+- Payments (Stripe)  
+- Geofencing  
+- Visitor profile  
+- Landholder analytics  
+- Enhanced map features  
+- Audit logs  
+- SMS/email notifications  
+
+### Deployment
+- Backend → Azure App Service  
+- Database → Azure Postgres  
+
+Notes:  
+Beta introduces operational readiness and revenue pathways.
+
+---
+
+## 5. Phase 4 — Launch (8–12 months)
+
+### Goals
+- Release Tend publicly  
+- Ensure reliability, scalability, and compliance  
+
+### Deliverables
+- Insurance integration  
+- Mobile app (React Native)  
+- Reputation system  
+- Multi‑property management  
+- Performance optimisation  
+- Monitoring and observability  
+
+Notes:  
+Launch focuses on trust, safety, and smooth onboarding.
+
+---
+
+## 6. Phase 5 — Scale (12+ months)
+
+### Goals
+- Expand Tend into a national platform  
+- Support more complex landholder needs  
+
+### Deliverables
+- Third‑party API integrations  
+- Advanced analytics  
+- Landholder revenue tools  
+- Partnerships with tourism bodies  
+- Multi‑region deployment  
+- Offline mode for remote areas  
+
+Notes:  
+Scale emphasises resilience, partnerships, and long‑term stewardship.
+
+---
+
+## 7. Guiding Roadmap Principles
+- Build trust first  
+- Prioritise safety  
+- Keep flows simple  
+- Deliver value early  
+- Scale responsibly  
 
