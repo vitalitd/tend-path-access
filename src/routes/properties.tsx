@@ -82,10 +82,10 @@ function PropertiesPage() {
               The ledger is fresh. Be among the first stewards to open your land.
             </p>
             <Link
-              to="/auth"
+              to="/dashboard"
               className="font-mono text-xs uppercase tracking-widest border border-ink px-6 py-3 inline-block hover:bg-ink hover:text-paper transition-colors"
             >
-              List a property
+              Open the steward's desk
             </Link>
           </div>
         ) : (
