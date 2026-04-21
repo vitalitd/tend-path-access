@@ -19,6 +19,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<AppRole | null>(null);
+  // `loading` stays true until the initial getSession() has resolved AND
+  // any subsequent role lookup has completed. This avoids a race where
+  // route guards see `loading=false, user=null` for one render and bounce
+  // the user to /auth before the persisted session is restored.
   const [loading, setLoading] = useState(true);
 
   const loadRole = async (userId: string) => {
@@ -32,26 +36,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    let initialResolved = false;
+
+    // Listener: never await inside the callback — defer Supabase calls so we
+    // don't deadlock the auth event loop. Only flip loading off here AFTER
+    // the initial getSession() has run, so we don't briefly report
+    // "logged out" before the persisted session restores.
     const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
       setUser(newSession?.user ?? null);
       if (newSession?.user) {
-        setLoading(true);
+        const uid = newSession.user.id;
         setTimeout(() => {
-          void loadRole(newSession.user.id).finally(() => setLoading(false));
+          void loadRole(uid).finally(() => {
+            if (initialResolved) setLoading(false);
+          });
         }, 0);
       } else {
         setRole(null);
-        setLoading(false);
+        if (initialResolved) setLoading(false);
       }
     });
 
-    supabase.auth.getSession().then(({ data: { session: s } }) => {
+    void supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
       setUser(s?.user ?? null);
       if (s?.user) {
-        void loadRole(s.user.id).finally(() => setLoading(false));
+        void loadRole(s.user.id).finally(() => {
+          initialResolved = true;
+          setLoading(false);
+        });
       } else {
+        initialResolved = true;
         setLoading(false);
       }
     });
