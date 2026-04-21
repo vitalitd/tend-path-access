@@ -88,8 +88,8 @@ function PropertyDetail() {
   if (loading) return <div className="min-h-screen bg-paper"><SiteHeader /><p className="p-12 label-meta">Loading…</p></div>;
   if (!property) return <div className="min-h-screen bg-paper"><SiteHeader /><p className="p-12 label-meta">Not found.</p></div>;
 
-  const rules = property.access_rules?.[0];
-  const price = property.pricing?.[0];
+  const rules = property.access_rules;
+  const price = property.pricing;
 
   return (
     <div className="min-h-screen bg-paper">
