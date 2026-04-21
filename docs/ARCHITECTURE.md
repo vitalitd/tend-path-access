@@ -1,213 +1,206 @@
-ARCHITECTURE.md
+# ARCHITECTURE.md  
+Tend — System Architecture  
+Quiet, careful, safety‑aware design language
 
-A clear, technical overview of the Tend platform architecture
+---
 
-1. Overview
+## 1. Overview
+Tend is a digital access platform that connects landholders and visitors through a trusted, care‑led system.  
+The architecture is modular, steady, and easy to evolve from prototype to production.  
+It supports:
 
-Tend is a digital access platform that connects landholders and visitors through a trusted, care‑led system. The architecture is designed to be modular, scalable, and easy to evolve from prototype to production. It supports rapid iteration (via Lovable), structured engineering (via VS Code + Copilot), and long‑term deployment (via Azure).
+- rapid iteration (Lovable)  
+- structured engineering (VS Code + Copilot)  
+- long‑term deployment (Azure)  
 
-2. System Architecture
+The system is intentionally simple and explicit.
+
+---
+
+## 2. System Architecture
 
 Tend consists of three major layers:
 
-1. Frontend (Client Layer)
+---
 
-Framework: React or Next.js
+## 2.1 Frontend (Client Layer)
 
-Purpose: User-facing interface for landholders and visitors
-
-Key Features:
-
-Authentication
-
-Property discovery
-
-Access request flow
-
-Check‑in / check‑out
-
-Map-based navigation
-
-Landholder dashboard
-
-2. Backend (Application Layer)
-
-Framework: Node.js (Express) or Python (FastAPI)
-
-Purpose: Business logic, API endpoints, validation, and integrations
+**Framework:** React or Next.js  
+**Purpose:** User‑facing interface for landholders and visitors
 
 Key Responsibilities:
+- Authentication  
+- Property discovery  
+- Access request flow  
+- Check‑in / check‑out  
+- Map‑based navigation  
+- Landholder dashboard  
 
-User management
+Notes:
+- Tone is quiet and factual.  
+- Safety notes are always visible.  
 
-Access request lifecycle
+---
 
-Visit tracking
+## 2.2 Backend (Application Layer)
 
-Rule enforcement
+**Framework:** Node.js (Express) or Python (FastAPI)  
+**Purpose:** Business logic, API endpoints, validation, and integrations
 
-Notifications
+Key Responsibilities:
+- User management  
+- Access request lifecycle  
+- Visit tracking  
+- Rule enforcement  
+- Notifications (future)  
+- Payment integration (future)  
+- Insurance integration (future)  
 
-Payment integration (future)
+Notes:
+- API is REST‑based and returns JSON.  
+- Validation is strict and predictable.  
 
-Insurance integration (future)
+---
 
-3. Database (Persistence Layer)
+## 2.3 Database (Persistence Layer)
 
-Database: PostgreSQL (Supabase or Azure Postgres)
-
-Purpose: Store structured, relational data
+**Database:** PostgreSQL (Supabase or Azure Postgres)  
+**Purpose:** Store structured, relational data
 
 Core Tables:
+- users  
+- properties  
+- access_rules  
+- access_requests  
+- visits  
+- pricing  
+- audit_logs  
 
-users
+Notes:
+- Geospatial fields use PostGIS where needed.  
+- Audit logs support operational oversight.  
 
-properties
+---
 
-rules
+## 3. Data Flow
 
-access_requests
+---
 
-visits
+### 3.1 Visitor Flow
+1. Visitor browses available properties  
+2. Submits an access request  
+3. Backend validates request  
+4. Landholder approves or declines  
+5. Visitor receives confirmation  
+6. Visitor checks in and checks out  
+7. Visit is logged in the audit trail  
 
-pricing
+---
 
-audit_logs
+### 3.2 Landholder Flow
+1. Landholder creates a property  
+2. Sets rules, availability, and pricing  
+3. Receives access requests  
+4. Approves or declines  
+5. Views visit history  
 
-3. Data Flow
+---
 
-Visitor Flow
+## 4. Authentication & Security
 
-Visitor browses properties
-
-Requests access
-
-Backend validates request
-
-Landholder approves/declines
-
-Visitor receives confirmation
-
-Visitor checks in/out
-
-Visit logged in audit trail
-
-Landholder Flow
-
-Landholder creates property
-
-Sets rules, availability, pricing
-
-Receives access requests
-
-Approves/declines
-
-Views visit history
-
-4. Authentication & Security
-
-Auth Provider: Auth0, Supabase Auth, or Azure AD B2C
+**Auth Provider:** Auth0, Supabase Auth, or Azure AD B2C
 
 Security Measures:
+- JWT‑based authentication  
+- Role‑based access control (visitor, landholder, admin)  
+- Audit logging  
+- Input validation  
+- Rate limiting  
 
-JWT-based authentication
+Notes:
+- Safety and privacy are prioritised.  
+- Admin role is reserved for operational oversight.  
 
-Role-based access control (visitor, landholder, admin)
+---
 
-Audit logging
+## 5. Maps & Geospatial Logic
 
-Input validation
-
-Rate limiting
-
-5. Maps & Geospatial Logic
-
-Map Provider: Mapbox or Leaflet
+**Map Provider:** Mapbox or Leaflet
 
 Features:
+- Property boundaries  
+- Allowed zones  
+- Restricted zones  
+- Check‑in radius validation  
+- GPS‑based visit tracking  
 
-Property boundaries
+Notes:
+- GPS is optional and privacy‑aware.  
+- No‑go zones are displayed clearly and calmly.  
 
-Allowed zones
+---
 
-Restricted zones
+## 6. Integrations (Future)
 
-Check‑in radius validation
+### Payments
+- Stripe for bookings and payouts
 
-GPS-based visit tracking
+### Insurance
+- API integration for coverage verification
 
-6. Integrations (Future)
+### Notifications
+- Email (SendGrid)  
+- SMS (Twilio)
 
-Payments
+Notes:
+- Not included in MVP.  
+- Designed for clean future expansion.  
 
-Stripe for bookings and payouts
+---
 
-Insurance
+## 7. Deployment Architecture
 
-API integration for coverage verification
+### MVP
+- **Frontend:** Vercel or Lovable hosting  
+- **Backend:** Lovable backend or simple Node server  
+- **Database:** Supabase  
 
-Notifications
+### Production
+- **Frontend:** Azure Static Web Apps  
+- **Backend:** Azure App Service  
+- **Database:** Azure Postgres  
+- **Storage:** Azure Blob Storage  
+- **Monitoring:** Azure Application Insights  
 
-Email (SendGrid)
+Notes:
+- Deployment is steady and predictable.  
+- Infrastructure is minimal but scalable.  
 
-SMS (Twilio)
+---
 
-7. Deployment Architecture
+## 8. Development Workflow
 
-MVP
+### Prototype
+- Lovable generates UI and initial code  
+- GitHub stores the repo  
+- VS Code used for refinement  
 
-Frontend: Vercel or Lovable hosting
+### Engineering
+- Copilot assists with backend logic  
+- GitHub PRs for structured changes  
+- Automated tests added  
 
-Backend: Lovable backend or simple Node server
+### Deployment
+- CI/CD via GitHub Actions  
+- Azure hosting  
 
-Database: Supabase
+---
 
-Production
+## 9. Guiding Principles
+- Care‑led  
+- Secure by design  
+- Modular  
+- Scalable  
+- Transparent  
+- Easy to maintain  
 
-Frontend: Azure Static Web Apps
-
-Backend: Azure App Service
-
-Database: Azure Postgres
-
-Storage: Azure Blob Storage
-
-Monitoring: Azure Application Insights
-
-8. Development Workflow
-
-Prototype
-
-Lovable generates UI and initial code
-
-GitHub stores repo
-
-VS Code used for refinement
-
-Engineering
-
-Copilot assists with backend logic
-
-GitHub PRs for structured changes
-
-Automated tests added
-
-Deployment
-
-CI/CD pipeline via GitHub Actions
-
-Azure hosting
-
-9. Guiding Principles
-
-Care-led
-
-Secure by design
-
-Modular
-
-Scalable
-
-Transparent
-
-Easy to maintain

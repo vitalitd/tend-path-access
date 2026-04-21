@@ -1,110 +1,112 @@
-1. Overview
+# DATA_MODEL.md  
+Tend — Core Data Model  
+Quiet, careful, safety‑aware design language
 
-This document defines the core data structures for the Tend platform. It reflects the MVP requirements from the specifications and supports future extensibility.
+---
 
-2. Entity List
+## 1. Overview
+This document defines the core data structures for the Tend platform.  
+It reflects the MVP requirements and provides a stable foundation for future extensions such as tasks, points, and richer safety metadata.
 
-Users
+The model is intentionally simple, explicit, and easy to reason about.
 
-Properties
+---
 
-AccessRules
+## 2. Entity List (MVP)
 
-AccessRequests
+- Users  
+- Properties  
+- AccessRules  
+- AccessRequests  
+- Visits  
+- Pricing  
+- AuditLogs  
 
-Visits
+### Future (not MVP)
+- Tasks  
+- Points  
 
-Pricing
+---
 
-Tasks (future)
+## 3. Entity Definitions
 
-Points (future)
+---
 
-AuditLogs
+## 3.1 Users
+Represents all authenticated users of the platform.
 
-3. Entity Definitions
+Fields:
+- **id** (UUID)  
+- **role** (visitor | landowner | admin)  
+- **name**  
+- **email**  
+- **phone**  
+- **created_at**
 
-3.1 Users
+Notes:
+- Landowners can create and manage properties.  
+- Visitors can request access and check in/out.  
+- Admin is reserved for operational oversight.
 
-id (UUID)
-role (visitor | landowner | admin)
-name
-email
-phone
-created_at
+---
 
-3.2 Properties
+## 3.2 Properties
+Represents a land parcel available for access.
 
-id (UUID)
-landowner_id (FK → Users)
-name
-description
-location (lat/lng)
-boundary_geojson
-allowed_activities
-availability
-conditions
-created_at
+Fields:
+- **id** (UUID)  
+- **landowner_id** (FK → Users.id)  
+- **name**  
+- **description**  
+- **location** (lat, lng)  
+- **boundary_geojson**  
+- **allowed_activities** (array of strings)  
+- **availability** (boolean or schedule block)  
+- **conditions** (safety notes, rules, hazards)  
+- **created_at**
 
-3.3 AccessRules
+Notes:
+- Safety notes include livestock, machinery, terrain, weather considerations.  
+- Boundary GeoJSON supports map rendering and future routing.
 
-id (UUID)
-property_id (FK)
-group_size_limit
-time_restrictions
-warnings
-no_go_zones_geojson
+---
 
-3.4 AccessRequests
+## 3.3 AccessRules
+Defines constraints and safety‑related requirements for a property.
 
-id (UUID)
-user_id (FK)
-property_id (FK)
-status (pending | approved | declined | cancelled)
-requested_datetime
-group_size
-price_paid
-conditions_acknowledged (boolean)
-created_at
+Fields:
+- **id** (UUID)  
+- **property_id** (FK → Properties.id)  
+- **group_size_limit**  
+- **time_restrictions** (e.g., daylight hours only)  
+- **warnings** (e.g., bulls, snakes, machinery zones)  
+- **no_go_zones_geojson**
 
-3.5 Visits
+Notes:
+- Rules are displayed to visitors before requesting access.  
+- Acknowledgement is required.
 
-id (UUID)
-access_request_id (FK)
-check_in_time
-check_out_time
-gps_points (optional)
-offline_proof_hash
+---
 
-3.6 Pricing
+## 3.4 AccessRequests
+Represents a visitor’s request to access a property.
 
-id (UUID)
-property_id (FK)
-pricing_type (per_visit | day_pass | subscription)
-amount
-currency
+Fields:
+- **id** (UUID)  
+- **user_id** (FK → Users.id)  
+- **property_id** (FK → Properties.id)  
+- **status** (pending | approved | declined | cancelled)  
+- **requested_datetime**  
+- **group_size**  
+- **price_paid**  
+- **conditions_acknowledged** (boolean)  
+- **created_at**
 
-3.7 Tasks (Future)
+Notes:
+- Approval triggers instructions and safety reminders.  
+- Declines are factual and polite.
 
-id (UUID)
-property_id (FK)
-description
-instructions
-points_awarded
-status
+---
 
-3.8 Points (Future)
-
-id (UUID)
-user_id (FK)
-points
-expiry_date
-
-3.9 AuditLogs
-
-id (UUID)
-event_type
-user_id (FK)
-property_id (FK)
-timestamp
-metadata (JSON)
+## 3.5 Visits
+Represents an approved

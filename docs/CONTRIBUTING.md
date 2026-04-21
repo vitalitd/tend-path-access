@@ -1,112 +1,206 @@
-CONTRIBUTING.md
+# ARCHITECTURE.md  
+Tend — System Architecture  
+Quiet, careful, safety‑aware design language
 
-1. Purpose
+---
 
-This document provides guidelines for contributing to the Tend codebase. It ensures consistency, quality, and clarity across frontend, backend, and documentation work.
+## 1. Overview
+Tend is a digital access platform that connects landholders and visitors through a trusted, care‑led system.  
+The architecture is modular, steady, and easy to evolve from prototype to production.  
+It supports:
 
-2. How We Work
+- rapid iteration (Lovable)  
+- structured engineering (VS Code + Copilot)  
+- long‑term deployment (Azure)  
 
-Prototype → Engineer → Deploy workflow
+The system is intentionally simple and explicit.
 
-Lovable may generate initial components
+---
 
-VS Code + GitHub Copilot used for refinement
+## 2. System Architecture
 
-All changes go through GitHub pull requests
+Tend consists of three major layers:
 
-Documentation lives in /docs
+---
 
-3. Branching Strategy
+## 2.1 Frontend (Client Layer)
 
-main — stable, deployable
+**Framework:** React or Next.js  
+**Purpose:** User‑facing interface for landholders and visitors
 
-dev — active development
+Key Responsibilities:
+- Authentication  
+- Property discovery  
+- Access request flow  
+- Check‑in / check‑out  
+- Map‑based navigation  
+- Landholder dashboard  
 
-Feature branches:
+Notes:
+- Tone is quiet and factual.  
+- Safety notes are always visible.  
 
-feature/<short-description>
-fix/<short-description>
-docs/<short-description>
+---
 
-4. Pull Requests
+## 2.2 Backend (Application Layer)
 
-Every PR must include:
+**Framework:** Node.js (Express) or Python (FastAPI)  
+**Purpose:** Business logic, API endpoints, validation, and integrations
 
-Summary of changes
+Key Responsibilities:
+- User management  
+- Access request lifecycle  
+- Visit tracking  
+- Rule enforcement  
+- Notifications (future)  
+- Payment integration (future)  
+- Insurance integration (future)  
 
-Linked issue (if applicable)
+Notes:
+- API is REST‑based and returns JSON.  
+- Validation is strict and predictable.  
 
-Screenshots for UI changes
+---
 
-Notes on breaking changes
+## 2.3 Database (Persistence Layer)
 
-Tests (where relevant)
+**Database:** PostgreSQL (Supabase or Azure Postgres)  
+**Purpose:** Store structured, relational data
 
-PRs require at least one approval before merging.
+Core Tables:
+- users  
+- properties  
+- access_rules  
+- access_requests  
+- visits  
+- pricing  
+- audit_logs  
 
-5. Code Style
+Notes:
+- Geospatial fields use PostGIS where needed.  
+- Audit logs support operational oversight.  
 
-Frontend
+---
 
-React/Next.js
+## 3. Data Flow
 
-ESLint + Prettier
+---
 
-Functional components
+### 3.1 Visitor Flow
+1. Visitor browses available properties  
+2. Submits an access request  
+3. Backend validates request  
+4. Landholder approves or declines  
+5. Visitor receives confirmation  
+6. Visitor checks in and checks out  
+7. Visit is logged in the audit trail  
 
-Avoid unnecessary state
+---
 
-Use TypeScript where possible
+### 3.2 Landholder Flow
+1. Landholder creates a property  
+2. Sets rules, availability, and pricing  
+3. Receives access requests  
+4. Approves or declines  
+5. Views visit history  
 
-Backend
+---
 
-Node.js (Express) or Python (FastAPI)
+## 4. Authentication & Security
 
-Clear separation of routes, services, models
+**Auth Provider:** Auth0, Supabase Auth, or Azure AD B2C
 
-Use environment variables for secrets
+Security Measures:
+- JWT‑based authentication  
+- Role‑based access control (visitor, landholder, admin)  
+- Audit logging  
+- Input validation  
+- Rate limiting  
 
-Follow REST conventions
+Notes:
+- Safety and privacy are prioritised.  
+- Admin role is reserved for operational oversight.  
 
-6. Documentation
+---
 
-All major features must include:
+## 5. Maps & Geospatial Logic
 
-Architecture notes
+**Map Provider:** Mapbox or Leaflet
 
-API updates
+Features:
+- Property boundaries  
+- Allowed zones  
+- Restricted zones  
+- Check‑in radius validation  
+- GPS‑based visit tracking  
 
-UX flow updates
+Notes:
+- GPS is optional and privacy‑aware.  
+- No‑go zones are displayed clearly and calmly.  
 
-Data model changes
+---
 
-7. Commit Messages
+## 6. Integrations (Future)
 
-Use conventional commits:
+### Payments
+- Stripe for bookings and payouts
 
-feat: add access request flow
-fix: correct map boundary validation
-docs: update architecture
-refactor: simplify booking logic
+### Insurance
+- API integration for coverage verification
 
-8. Testing
+### Notifications
+- Email (SendGrid)  
+- SMS (Twilio)
 
-Unit tests for backend logic
+Notes:
+- Not included in MVP.  
+- Designed for clean future expansion.  
 
-Component tests for critical UI
+---
 
-Manual testing for map and offline flows
+## 7. Deployment Architecture
 
-9. Security
+### MVP
+- **Frontend:** Vercel or Lovable hosting  
+- **Backend:** Lovable backend or simple Node server  
+- **Database:** Supabase  
 
-Never commit secrets
+### Production
+- **Frontend:** Azure Static Web Apps  
+- **Backend:** Azure App Service  
+- **Database:** Azure Postgres  
+- **Storage:** Azure Blob Storage  
+- **Monitoring:** Azure Application Insights  
 
-Follow role‑based access control
+Notes:
+- Deployment is steady and predictable.  
+- Infrastructure is minimal but scalable.  
 
-Validate all inputs
+---
 
-Log access events
+## 8. Development Workflow
 
-10. Contact
+### Prototype
+- Lovable generates UI and initial code  
+- GitHub stores the repo  
+- VS Code used for refinement  
 
-For questions, open a GitHub issue or contact the maintainers.
+### Engineering
+- Copilot assists with backend logic  
+- GitHub PRs for structured changes  
+- Automated tests added  
+
+### Deployment
+- CI/CD via GitHub Actions  
+- Azure hosting  
+
+---
+
+## 9. Guiding Principles
+- Care‑led  
+- Secure by design  
+- Modular  
+- Scalable  
+- Transparent  
+- Easy to maintain  
+
