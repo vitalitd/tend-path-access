@@ -29,10 +29,9 @@ interface Detail {
 function PropertyDetail() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-  const { user, role } = useAuth();
+  const { user, role, loading: authLoading } = useAuth();
   const [property, setProperty] = useState<Detail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
 
   // form
   const [date, setDate] = useState("");
