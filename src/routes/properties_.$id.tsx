@@ -66,7 +66,7 @@ function PropertyDetail() {
       return;
     }
     setSubmitting(true);
-    const price = property?.pricing?.[0];
+    const price = property?.pricing;
     const { error } = await supabase.from("access_requests").insert({
       user_id: user.id,
       property_id: id,
