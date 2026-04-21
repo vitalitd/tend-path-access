@@ -11,7 +11,7 @@ export const Route = createFileRoute("/dashboard/properties/new")({
   component: NewProperty,
 });
 
-const ACTIVITY_OPTIONS = ["Walking", "Hiking", "Foraging", "Photography", "Painting", "Wildlife observation", "Silent contemplation"];
+const ACTIVITY_OPTIONS = ["Walking", "Hiking", "Foraging", "Photography", "Painting", "Wildlife observation", "Mountain biking", "Silent contemplation"];
 
 function NewProperty() {
   const { user, role, loading: authLoading } = useAuth();
