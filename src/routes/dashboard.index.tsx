@@ -28,6 +28,8 @@ interface RequestRow {
   visitor_message: string | null;
   property_id: string;
   user_id: string;
+  payment_status: string;
+  price_paid: number | null;
   properties: { name: string } | null;
 }
 
@@ -48,7 +50,7 @@ function Dashboard() {
         .order("created_at", { ascending: false }),
       supabase
         .from("access_requests")
-        .select("id, status, requested_datetime, group_size, visitor_message, property_id, user_id, properties!inner(name, landowner_id)")
+        .select("id, status, requested_datetime, group_size, visitor_message, property_id, user_id, payment_status, price_paid, properties!inner(name, landowner_id)")
         .eq("properties.landowner_id", user.id)
         .order("created_at", { ascending: false }),
     ]);

@@ -71,6 +71,18 @@ function MyRequestsPage() {
     if (user) void load();
   }, [user, authLoading]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get("payment");
+    if (payment === "success") {
+      toast.success("Payment received. Your passage is confirmed.");
+      window.history.replaceState({}, "", window.location.pathname);
+    } else if (payment === "cancelled") {
+      toast.message("Payment cancelled. You can try again any time.");
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
   const handleCheckIn = async (requestId: string) => {
     const { error } = await supabase
       .from("visits")
@@ -167,8 +179,32 @@ function MyRequestsPage() {
                     )}
                   </div>
 
-                  {isApproved && (
-                    <div className="mt-5 pt-4 border-t border-ink/15 flex flex-wrap gap-3">
+                  {isApproved && r.payment_status !== "paid" && (
+                    <div className="mt-5 pt-4 border-t border-ink/15 bg-twine/5 -mx-6 -mb-6 px-6 py-5">
+                      <p className="label-meta mb-2">§ Pay to confirm your passage</p>
+                      <p className="text-sm text-ink-muted mb-4 leading-relaxed">
+                        The steward has approved your request. Complete payment to unlock check-in.
+                      </p>
+                      <button
+                        onClick={() => handlePay(r.id)}
+                        disabled={payingId === r.id}
+                        className="font-mono text-xs uppercase tracking-widest bg-ink text-paper px-5 py-2.5 hover:bg-rust transition-colors disabled:opacity-50"
+                      >
+                        {payingId === r.id
+                          ? "Opening checkout…"
+                          : r.payment_status === "failed"
+                          ? "Retry payment"
+                          : "Pay now"}
+                      </button>
+                      {r.payment_status === "failed" && (
+                        <p className="label-meta text-rust mt-3">Last payment attempt failed.</p>
+                      )}
+                    </div>
+                  )}
+
+                  {isApproved && r.payment_status === "paid" && (
+                    <div className="mt-5 pt-4 border-t border-ink/15 flex flex-wrap gap-3 items-center">
+                      <span className="label-meta text-moss">● Paid</span>
                       {!visit && (
                         <button
                           onClick={() => handleCheckIn(r.id)}
