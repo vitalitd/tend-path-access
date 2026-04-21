@@ -20,10 +20,12 @@ export type Database = {
           created_at: string
           group_size: number
           id: string
+          payment_status: string
           price_paid: number | null
           property_id: string
           requested_datetime: string
           status: Database["public"]["Enums"]["request_status"]
+          stripe_session_id: string | null
           updated_at: string
           user_id: string
           visitor_message: string | null
@@ -33,10 +35,12 @@ export type Database = {
           created_at?: string
           group_size?: number
           id?: string
+          payment_status?: string
           price_paid?: number | null
           property_id: string
           requested_datetime: string
           status?: Database["public"]["Enums"]["request_status"]
+          stripe_session_id?: string | null
           updated_at?: string
           user_id: string
           visitor_message?: string | null
@@ -46,10 +50,12 @@ export type Database = {
           created_at?: string
           group_size?: number
           id?: string
+          payment_status?: string
           price_paid?: number | null
           property_id?: string
           requested_datetime?: string
           status?: Database["public"]["Enums"]["request_status"]
+          stripe_session_id?: string | null
           updated_at?: string
           user_id?: string
           visitor_message?: string | null
