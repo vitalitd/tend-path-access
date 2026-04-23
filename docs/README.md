@@ -4,7 +4,7 @@ This repository has been archived and is no longer active.
 
 All documentation and ongoing development for the Tend project has been consolidated into the main application repository:
 
-**https://github.com/vitaltid/tend-path-access**
+**https://github.com/vitalitd/tend-path-access**
 
 That repository now contains:
 - The full application codebase

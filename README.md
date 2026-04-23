@@ -1,3 +1,19 @@
+## Repository Archived
+
+This repository has been archived and is no longer active.
+
+All documentation and ongoing development for the Tend project has been consolidated into the main application repository:
+
+**https://github.com/vitalitd/tend-path-access**
+
+That repository now contains:
+- The full application codebase
+- All project documentation (migrated from this repo)
+- The current roadmap and architecture
+- Active issues and future development work
+
+This archived repository remains available for historical reference only.
+
 # Tend — A Better Way to Access Nature
 
 Tend is a digital access platform designed to make it easier, safer, and more transparent for people to enjoy private land while giving landholders confidence, control, and fair compensation. It connects walkers, riders, anglers, birders, and families with the landscapes they love — and gives landholders a simple, low‑friction way to manage access on their terms.
