@@ -1,3 +1,19 @@
+## Repository Archived
+
+This repository has been archived and is no longer active.
+
+All documentation and ongoing development for the Tend project has been consolidated into the main application repository:
+
+**https://github.com/vitaltid/tend-path-access**
+
+That repository now contains:
+- The full application codebase
+- All project documentation (migrated from this repo)
+- The current roadmap and architecture
+- Active issues and future development work
+
+This archived repository remains available for historical reference only.
+
 # Tend  
 A quiet, careful digital access platform for landholders and visitors
 
