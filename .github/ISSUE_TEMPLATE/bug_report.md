@@ -8,26 +8,22 @@ assignees: ''
 ---
 
 ---
-name: Bug Report
-about: Report a defect or unexpected behaviour
-labels: bug
+name: Documentation Task
+about: Create or update documentation
+labels: docs
 ---
 
-## What happened
-Describe the issue clearly.
+## Files involved
+List the files or sections to update.
 
-## Expected behaviour
-What should have happened instead.
+## Purpose
+Why this documentation is needed.
 
-## Steps to reproduce
-1.
-2.
-3.
+## Required content
+Outline the key points or structure.
 
-## Environment
-- Browser:
-- Device:
-- Environment (local/staging/prod):
+## Cross-links
+Any related docs or issues.
 
-## Additional context
-Screenshots, logs, or notes.
+## Additional notes
+Anything else relevant.
