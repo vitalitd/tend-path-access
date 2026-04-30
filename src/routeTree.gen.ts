@@ -9,8 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PropertiesRouteImport } from './routes/properties'
 import { Route as MyRequestsRouteImport } from './routes/my-requests'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
@@ -19,6 +21,11 @@ import { Route as PropertiesIdRouteImport } from './routes/properties_.$id'
 import { Route as DashboardPropertiesNewRouteImport } from './routes/dashboard.properties.new'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PropertiesRoute = PropertiesRouteImport.update({
   id: '/properties',
   path: '/properties',
@@ -27,6 +34,11 @@ const PropertiesRoute = PropertiesRouteImport.update({
 const MyRequestsRoute = MyRequestsRouteImport.update({
   id: '/my-requests',
   path: '/my-requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -69,8 +81,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
   '/my-requests': typeof MyRequestsRoute
   '/properties': typeof PropertiesRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
@@ -79,8 +93,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/my-requests': typeof MyRequestsRoute
   '/properties': typeof PropertiesRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
@@ -91,8 +107,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
   '/my-requests': typeof MyRequestsRoute
   '/properties': typeof PropertiesRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/properties_/$id': typeof PropertiesIdRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
@@ -104,8 +122,10 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/forgot-password'
     | '/my-requests'
     | '/properties'
+    | '/reset-password'
     | '/properties/$id'
     | '/dashboard/'
     | '/api/stripe/webhook'
@@ -114,8 +134,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/forgot-password'
     | '/my-requests'
     | '/properties'
+    | '/reset-password'
     | '/properties/$id'
     | '/dashboard'
     | '/api/stripe/webhook'
@@ -125,8 +147,10 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/forgot-password'
     | '/my-requests'
     | '/properties'
+    | '/reset-password'
     | '/properties_/$id'
     | '/dashboard/'
     | '/api/stripe/webhook'
@@ -137,14 +161,23 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   MyRequestsRoute: typeof MyRequestsRoute
   PropertiesRoute: typeof PropertiesRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   PropertiesIdRoute: typeof PropertiesIdRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/properties': {
       id: '/properties'
       path: '/properties'
@@ -157,6 +190,13 @@ declare module '@tanstack/react-router' {
       path: '/my-requests'
       fullPath: '/my-requests'
       preLoaderRoute: typeof MyRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -229,8 +269,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   MyRequestsRoute: MyRequestsRoute,
   PropertiesRoute: PropertiesRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   PropertiesIdRoute: PropertiesIdRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
