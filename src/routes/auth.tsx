@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
@@ -137,6 +137,17 @@ function AuthPage() {
           >
             {submitting ? "..." : mode === "signin" ? "Sign in" : "Create account"}
           </button>
+
+          {mode === "signin" && (
+            <div className="pt-1 text-right">
+              <Link
+                to="/forgot-password"
+                className="label-meta hover:text-rust transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+          )}
         </form>
 
         <button
