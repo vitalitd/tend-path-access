@@ -5,6 +5,9 @@ export default defineConfig({
     start: true,
     cloudflare: {
       enabled: true
+    },
+    nitro: {
+      preset: "cloudflare"
     }
   },
   vite: {
