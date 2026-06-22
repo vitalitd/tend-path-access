@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tanstack start dev",
-    "build": "bunx tanstack start build --cloudflare",
+    "build": "bunx start build --cloudflare",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write ."
@@ -73,6 +73,7 @@
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-tanstack-config": "^1.4.0",
+    "@tanstack/start": "^1.120.20",
     "@types/node": "^22.16.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
