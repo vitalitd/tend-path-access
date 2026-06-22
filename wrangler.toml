@@ -1,0 +1,6 @@
+name = "tend-path-access"
+main = "dist/server/server.js"
+compatibility_date = "2026-06-22"
+
+[site]
+bucket = "dist/client"
