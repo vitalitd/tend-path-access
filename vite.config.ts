@@ -11,6 +11,8 @@ export default defineConfig({
       outDir: "dist"
     },
     ssr: {
+      target: "webworker",
+      noExternal: true,
       external: ["@cloudflare/workers-types"]
     }
   }
