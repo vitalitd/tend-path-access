@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tanstack start dev",
-    "build": "bunx @tanstackstart build --cloudflare",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write ."
