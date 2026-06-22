@@ -1,11 +1,11 @@
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { tanstackStart } from "@tanstack/start-vite-plugin";
+import { startVitePlugin } from "@tanstack/start-vite-plugin";
 
 export default defineConfig({
   plugins: [
     tsconfigPaths(),
-    tanstackStart({
+    startVitePlugin({
       ssr: {
         target: "cloudflare"
       }
