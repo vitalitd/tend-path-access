@@ -1,6 +1,5 @@
 name = "tend-path-access"
-main = "worker.js"
-module = true
+main = "worker.mjs"
 compatibility_date = "2024-01-01"
 assets = { directory = "dist/client" }
 compatibility_flags = ["nodejs_compat"]
