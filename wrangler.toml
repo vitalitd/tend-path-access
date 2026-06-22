@@ -4,5 +4,4 @@ compatibility_date = "2024-01-01"
 
 assets = { directory = "dist/client" }
 
-[compatibility_flags]
-nodejs_compat = true
+compatibility_flags = ["nodejs_compat"]
