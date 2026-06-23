@@ -20,6 +20,7 @@ export default defineConfig({
         process.env.NODE_ENV || "production"
       ),
       "process.env.TSS_ENV": JSON.stringify("production"),
+      "process.env.TSS_BUILD_TARGET": JSON.stringify("client"),
     },
   },
 });
