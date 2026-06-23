@@ -19,7 +19,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as PropertiesIdRouteImport } from './routes/properties_.$id'
 import { Route as DashboardPropertiesNewRouteImport } from './routes/dashboard.properties.new'
-import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -71,11 +70,6 @@ const DashboardPropertiesNewRoute = DashboardPropertiesNewRouteImport.update({
   path: '/properties/new',
   getParentRoute: () => DashboardRoute,
 } as any)
-const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
-  id: '/api/stripe/webhook',
-  path: '/api/stripe/webhook',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -87,7 +81,6 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/dashboard/properties/new': typeof DashboardPropertiesNewRoute
 }
 export interface FileRoutesByTo {
@@ -99,7 +92,6 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/dashboard/properties/new': typeof DashboardPropertiesNewRoute
 }
 export interface FileRoutesById {
@@ -113,7 +105,6 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/properties_/$id': typeof PropertiesIdRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/dashboard/properties/new': typeof DashboardPropertiesNewRoute
 }
 export interface FileRouteTypes {
@@ -128,7 +119,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/properties/$id'
     | '/dashboard/'
-    | '/api/stripe/webhook'
     | '/dashboard/properties/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -140,7 +130,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/properties/$id'
     | '/dashboard'
-    | '/api/stripe/webhook'
     | '/dashboard/properties/new'
   id:
     | '__root__'
@@ -153,7 +142,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/properties_/$id'
     | '/dashboard/'
-    | '/api/stripe/webhook'
     | '/dashboard/properties/new'
   fileRoutesById: FileRoutesById
 }
@@ -166,7 +154,6 @@ export interface RootRouteChildren {
   PropertiesRoute: typeof PropertiesRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   PropertiesIdRoute: typeof PropertiesIdRoute
-  ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -241,13 +228,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardPropertiesNewRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/api/stripe/webhook': {
-      id: '/api/stripe/webhook'
-      path: '/api/stripe/webhook'
-      fullPath: '/api/stripe/webhook'
-      preLoaderRoute: typeof ApiStripeWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -274,7 +254,6 @@ const rootRouteChildren: RootRouteChildren = {
   PropertiesRoute: PropertiesRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   PropertiesIdRoute: PropertiesIdRoute,
-  ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
