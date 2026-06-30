@@ -1,206 +1,275 @@
-# ARCHITECTURE.md  
-Tend — System Architecture  
+ARCHITECTURE.md
+Tend — System Architecture
 Quiet, careful, safety‑aware design language
 
----
+1. Overview
+Tend is a digital access platform that connects landholders and visitors through a trusted, care‑led system.
+The architecture is modular, steady, and easy to evolve from prototype to production.
 
-## 1. Overview
-Tend is a digital access platform that connects landholders and visitors through a trusted, care‑led system.  
-The architecture is modular, steady, and easy to evolve from prototype to production.  
 It supports:
 
-- rapid iteration (Lovable)  
-- structured engineering (VS Code + Copilot)  
-- long‑term deployment (Azure)  
+rapid iteration
+
+structured engineering
+
+long‑term deployment
 
 The system is intentionally simple and explicit.
 
----
-
-## 2. System Architecture
-
+2. System Architecture
 Tend consists of three major layers:
 
----
+Frontend (Client Layer)
 
-## 2.1 Frontend (Client Layer)
+Backend (Application Layer)
 
-**Framework:** React or Next.js  
-**Purpose:** User‑facing interface for landholders and visitors
+Database (Persistence Layer)
 
-Key Responsibilities:
-- Authentication  
-- Property discovery  
-- Access request flow  
-- Check‑in / check‑out  
-- Map‑based navigation  
-- Landholder dashboard  
+The platform uses Cloudflare Workers for backend logic and Supabase for identity and data storage.
 
-Notes:
-- Tone is quiet and factual.  
-- Safety notes are always visible.  
+2.1 Frontend (Client Layer)
+Framework: TanStack Start (React)
+Hosting: Cloudflare Pages
 
----
-
-## 2.2 Backend (Application Layer)
-
-**Framework:** Node.js (Express) or Python (FastAPI)  
-**Purpose:** Business logic, API endpoints, validation, and integrations
+Purpose:
+Provide a calm, factual interface for landholders and visitors.
 
 Key Responsibilities:
-- User management  
-- Access request lifecycle  
-- Visit tracking  
-- Rule enforcement  
-- Notifications (future)  
-- Payment integration (future)  
-- Insurance integration (future)  
+
+Authentication
+
+Property discovery
+
+Access request flow
+
+Check‑in / check‑out
+
+Map‑based navigation
+
+Landholder dashboard
 
 Notes:
-- API is REST‑based and returns JSON.  
-- Validation is strict and predictable.  
 
----
+Tone is quiet and factual.
 
-## 2.3 Database (Persistence Layer)
+Safety notes are always visible.
 
-**Database:** PostgreSQL (Supabase or Azure Postgres)  
-**Purpose:** Store structured, relational data
+Frontend communicates with Workers using JSON APIs.
+
+2.2 Backend (Application Layer)
+Runtime: Cloudflare Workers
+Purpose: Business logic, validation, and secure access to Supabase
+
+Key Responsibilities:
+
+User management
+
+Access request lifecycle
+
+Visit tracking
+
+Rule enforcement
+
+Payment integration (future)
+
+Insurance integration (future)
+
+Notifications (future)
+
+Notes:
+
+Workers act as Tend’s backend.
+
+All sensitive operations use the Supabase service‑role key stored securely in Worker environment variables.
+
+Validation is strict and predictable.
+
+Workers enforce rate limiting and safety rules.
+
+2.3 Database (Persistence Layer)
+Database: Supabase PostgreSQL
+Purpose: Store structured, relational data with strong security guarantees
 
 Core Tables:
-- users  
-- properties  
-- access_rules  
-- access_requests  
-- visits  
-- pricing  
-- audit_logs  
+
+users
+
+properties
+
+access_rules
+
+access_requests
+
+visits
+
+pricing
+
+audit_logs
 
 Notes:
-- Geospatial fields use PostGIS where needed.  
-- Audit logs support operational oversight.  
 
----
+Geospatial fields use PostGIS where needed.
 
-## 3. Data Flow
+Row Level Security (RLS) is enabled on all tables.
 
----
+Audit logs support operational oversight.
 
-### 3.1 Visitor Flow
-1. Visitor browses available properties  
-2. Submits an access request  
-3. Backend validates request  
-4. Landholder approves or declines  
-5. Visitor receives confirmation  
-6. Visitor checks in and checks out  
-7. Visit is logged in the audit trail  
+Daily backups are provided automatically.
 
----
+3. Data Flow
+3.1 Visitor Flow
+Visitor browses available properties
 
-### 3.2 Landholder Flow
-1. Landholder creates a property  
-2. Sets rules, availability, and pricing  
-3. Receives access requests  
-4. Approves or declines  
-5. Views visit history  
+Submits an access request
 
----
+Worker validates request
 
-## 4. Authentication & Security
+Landholder approves or declines
 
-**Auth Provider:** Auth0, Supabase Auth, or Azure AD B2C
+Visitor receives confirmation
+
+Visitor checks in and checks out
+
+Visit is logged in the audit trail
+
+3.2 Landholder Flow
+Landholder creates a property
+
+Sets rules, availability, and pricing
+
+Receives access requests
+
+Approves or declines
+
+Views visit history
+
+4. Authentication & Security
+Auth Provider: Supabase Auth
+Security Enforcement: RLS + Worker validation
 
 Security Measures:
-- JWT‑based authentication  
-- Role‑based access control (visitor, landholder, admin)  
-- Audit logging  
-- Input validation  
-- Rate limiting  
+
+JWT‑based authentication
+
+Role‑based access control (visitor, steward, landholder, admin)
+
+Audit logging
+
+Input validation
+
+Rate limiting
+
+Strict least‑privilege access
 
 Notes:
-- Safety and privacy are prioritised.  
-- Admin role is reserved for operational oversight.  
 
----
+Admin role is reserved for operational oversight.
 
-## 5. Maps & Geospatial Logic
+Passwords are hashed using bcrypt.
 
-**Map Provider:** Mapbox or Leaflet
+Email verification is required for all accounts.
+
+5. Maps & Geospatial Logic
+Map Provider: Mapbox or Leaflet
 
 Features:
-- Property boundaries  
-- Allowed zones  
-- Restricted zones  
-- Check‑in radius validation  
-- GPS‑based visit tracking  
+
+Property boundaries
+
+Allowed zones
+
+Restricted zones
+
+Check‑in radius validation
+
+GPS‑based visit tracking
 
 Notes:
-- GPS is optional and privacy‑aware.  
-- No‑go zones are displayed clearly and calmly.  
 
----
+GPS is optional and privacy‑aware.
 
-## 6. Integrations (Future)
+No‑go zones are displayed clearly and calmly.
 
-### Payments
-- Stripe for bookings and payouts
+6. Integrations (Future)
+Payments
+Stripe for bookings and payouts
 
-### Insurance
-- API integration for coverage verification
+No credit card data stored in Tend
 
-### Notifications
-- Email (SendGrid)  
-- SMS (Twilio)
+Insurance
+API integration for coverage verification
 
-Notes:
-- Not included in MVP.  
-- Designed for clean future expansion.  
+Notifications
+Email (SendGrid)
 
----
-
-## 7. Deployment Architecture
-
-### MVP
-- **Frontend:** Vercel or Lovable hosting  
-- **Backend:** Lovable backend or simple Node server  
-- **Database:** Supabase  
-
-### Production
-- **Frontend:** Azure Static Web Apps  
-- **Backend:** Azure App Service  
-- **Database:** Azure Postgres  
-- **Storage:** Azure Blob Storage  
-- **Monitoring:** Azure Application Insights  
+SMS (Twilio)
 
 Notes:
-- Deployment is steady and predictable.  
-- Infrastructure is minimal but scalable.  
 
----
+Not included in MVP.
 
-## 8. Development Workflow
+Designed for clean future expansion.
 
-### Prototype
-- Lovable generates UI and initial code  
-- GitHub stores the repo  
-- VS Code used for refinement  
+7. Deployment Architecture
+MVP
+Frontend: Cloudflare Pages
 
-### Engineering
-- Copilot assists with backend logic  
-- GitHub PRs for structured changes  
-- Automated tests added  
+Backend: Cloudflare Workers
 
-### Deployment
-- CI/CD via GitHub Actions  
-- Azure hosting  
+Database: Supabase
 
----
+Storage: Supabase Storage (optional)
 
-## 9. Guiding Principles
-- Care‑led  
-- Secure by design  
-- Modular  
-- Scalable  
-- Transparent  
-- Easy to maintain  
+Production
+Frontend: Cloudflare Pages
 
+Backend: Cloudflare Workers
+
+Database: Supabase Pro
+
+Storage: Supabase Storage
+
+Monitoring: Cloudflare Analytics + Supabase Logs
+
+Notes:
+
+Deployment is steady and predictable.
+
+Infrastructure is minimal but scalable.
+
+No servers to maintain.
+
+8. Development Workflow
+Prototype
+Lovable generates UI and initial code
+
+GitHub stores the repo
+
+VS Code used for refinement
+
+Engineering
+Copilot assists with backend logic
+
+GitHub PRs for structured changes
+
+Automated tests added
+
+Deployment
+CI/CD via GitHub Actions
+
+Cloudflare deployment
+
+9. Guiding Principles
+Care‑led
+
+Secure by design
+
+Modular
+
+Scalable
+
+Transparent
+
+Easy to maintain
+
+Tend’s architecture is intentionally quiet, predictable, and safe.
