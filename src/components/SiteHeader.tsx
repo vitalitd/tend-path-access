@@ -17,41 +17,52 @@ export function SiteHeader() {
           Tend.
         </Link>
         <nav className="flex items-center gap-2 md:gap-6 text-xs md:text-[11px] font-mono uppercase tracking-widest text-twine">
-          <Link
-            to="/properties"
-            className="hover:text-ink transition-colors"
-            activeProps={{ className: "text-ink" }}
-          >
-            Registry
-          </Link>
-          {user && role === "visitor" && (
-            <Link
-              to="/my-requests"
-              className="hover:text-ink transition-colors"
-              activeProps={{ className: "text-ink" }}
-            >
-              My Passages
-            </Link>
-          )}
-          {user && role === "landowner" && (
-            <Link
-              to="/dashboard"
-              className="hover:text-ink transition-colors"
-              activeProps={{ className: "text-ink" }}
-            >
-              Steward
-            </Link>
-          )}
-          {user ? (
-            <button onClick={handleSignOut} className="hover:text-rust transition-colors">
-              Sign out
-            </button>
-          ) : (
-            <Link to="/auth" className="hover:text-rust transition-colors">
-              Sign in
-            </Link>
-          )}
-        </nav>
+  <Link
+    to="/properties"
+    className="hover:text-ink transition-colors"
+    activeProps={{ className: "text-ink" }}
+  >
+    Registry
+  </Link>
+
+  {user && role === "visitor" && (
+    <Link
+      to="/my-requests"
+      className="hover:text-ink transition-colors"
+      activeProps={{ className: "text-ink" }}
+    >
+      My Passages
+    </Link>
+  )}
+
+  {user && role === "landowner" && (
+    <Link
+      to="/dashboard"
+      className="hover:text-ink transition-colors"
+      activeProps={{ className: "text-ink" }}
+    >
+      Steward
+    </Link>
+  )}
+
+  <Link
+    to="/contact"
+    className="hover:text-ink transition-colors"
+    activeProps={{ className: "text-ink" }}
+  >
+    Contact
+  </Link>
+
+  {user ? (
+    <button onClick={handleSignOut} className="hover:text-rust transition-colors">
+      Sign out
+    </button>
+  ) : (
+    <Link to="/auth" className="hover:text-rust transition-colors">
+      Sign in
+    </Link>
+  )}
+</nav>
       </div>
     </header>
   );
